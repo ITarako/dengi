@@ -28,12 +28,24 @@ class m180326_053931_addBaseTables extends Migration
             'id_parent' => $this->integer()->defaultValue(null),
         ]);
 
+        $this->createTable('{{%currencies}}', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(50)->notNull(),
+            'code' => $this->string(3)->notNull(),
+        ]);
+
+        /* $this->createIndex(
+            'idx-currencies-code',
+            'currencies',
+            'code'
+        ); */
+
         $this->createTable('{{%accounts}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'value' => $this->integer()->defaultValue(0),
-            'currency' => $this->string()->notNull(),
-            'id_user' => $this->integer()->notNull()
+            'id_user' => $this->integer()->notNull(),
+            'id_currency' => $this->integer()->notNull()
         ]);
 
         $this->addForeignKey(
@@ -41,6 +53,15 @@ class m180326_053931_addBaseTables extends Migration
             'accounts',
             'id_user',
             'users',
+            'id',
+            'CASCADE'
+        );
+
+        $this->addForeignKey(
+            'fk-accounts-id_currency',
+            'accounts',
+            'id_user',
+            'currencies',
             'id',
             'CASCADE'
         );
@@ -77,8 +98,9 @@ class m180326_053931_addBaseTables extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%operations}}');
-        $this->dropTable('{{%categories}}');
         $this->dropTable('{{%accounts}}');
+        $this->dropTable('{{%currencies}}');
+        $this->dropTable('{{%categories}}');
         $this->dropTable('{{%users}}');
     }
 
@@ -91,8 +113,6 @@ class m180326_053931_addBaseTables extends Migration
 
     public function down()
     {
-        echo "m180326_144646_addCategoryTable cannot be reverted.\n";
-
         return false;
     }
     */

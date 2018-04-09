@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use \app\models\Category;
 
 /**
  * Class m180326_144714_insertIntoCategories
@@ -22,21 +23,21 @@ class m180326_144714_insertIntoCategories extends Migration
             ['Зарплата', 1, null],
         ]);
 
-        $tmp = \app\models\Category::findOne(['name' => 'Автомобиль']);
+        $tmp = Category::findOne(['name' => 'Автомобиль']);
         $id = $tmp['id'];
         $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
             ['Бензин', 0, $id],
             ['Обслуживание авто', 0, $id]
         ]);
 
-        $tmp = \app\models\Category::findOne(['name' => 'Еда']);
+        $tmp = Category::findOne(['name' => 'Еда']);
         $id = $tmp['id'];
         $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
             ['Продукты', 0, $id],
             ['Обеды, перекусы', 0, $id]
         ]);
 
-        $tmp = \app\models\Category::findOne(['name' => 'Траты на жизнь']);
+        $tmp = Category::findOne(['name' => 'Траты на жизнь']);
         $id = $tmp['id'];
         $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
             ['Интернет, связь', 0, $id],
@@ -45,7 +46,7 @@ class m180326_144714_insertIntoCategories extends Migration
             ['Отдых', 0, $id],
         ]);
 
-        $tmp = \app\models\Category::findOne(['name' => 'Дом, семья']);
+        $tmp = Category::findOne(['name' => 'Дом, семья']);
         $id = $tmp['id'];
         $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
             ['Хозтовары', 0, $id],
@@ -54,7 +55,7 @@ class m180326_144714_insertIntoCategories extends Migration
             ['Родителям', 0, $id],
         ]);
 
-        $tmp = \app\models\Category::findOne(['name' => 'Здоровье, красота']);
+        $tmp = Category::findOne(['name' => 'Здоровье, красота']);
         $id = $tmp['id'];
         $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
             ['Аптека, препараты', 0, $id],
@@ -80,8 +81,6 @@ class m180326_144714_insertIntoCategories extends Migration
 
     public function down()
     {
-        echo "m180326_144714_insertIntoCategory cannot be reverted.\n";
-
         return false;
     }
     */
