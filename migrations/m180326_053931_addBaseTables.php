@@ -61,7 +61,7 @@ class m180326_053931_addBaseTables extends Migration
         $this->addForeignKey(
             'fk-accounts-id_currency',
             'accounts',
-            'id_user',
+            'id_currency',
             'currencies',
             'id',
             'CASCADE'
