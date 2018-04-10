@@ -71,10 +71,7 @@ class CategoryController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        //$data = Yii::$app->db->createCommand("SELECT id, name FROM categories WHERE id_parent IS NULL")->queryAll();
-        $data = Category::find()->where('id_parent IS NULL')->all();
-        $categories = ArrayHelper::map($data, 'id', 'name');
-        $categories[null]='--non set--';
+        $categories = $this->categoriesList();
 
         return $this->render('create', [
             'model' => $model,
@@ -97,10 +94,8 @@ class CategoryController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $data = Category::find()->where('id_parent IS NULL')->all();
-        $categories = ArrayHelper::map($data, 'id', 'name');
+        $categories = $this->categoriesList();
         unset($categories[$id]);
-        $categories[null]='--non set--';
 
         return $this->render('update', [
             'model' => $model,
@@ -136,5 +131,13 @@ class CategoryController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function categoriesList()
+    {
+        $data = Category::find()->where('id_parent IS NULL')->all();
+        $categories = ArrayHelper::map($data, 'id', 'title');
+        asort($categories);
+        return $categories;
     }
 }

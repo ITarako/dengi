@@ -8,11 +8,13 @@ use Yii;
  * This is the model class for table "categories".
  *
  * @property int $id
- * @property string $name
+ * @property string $title
+ * @property string $slug
  * @property bool $income
  * @property int $id_parent
  *
- * @property Operations[] $operations
+ * @property Operation[] $operations
+ * @property Category $parent
  */
 class Category extends \yii\db\ActiveRecord
 {
@@ -30,12 +32,21 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'income'], 'required'],
-            [['income'], 'boolean'],
-            [['id_parent'], 'default', 'value' => null],
-            [['id_parent'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-            //[['id_parent'], 'targetClass' => static::className(), 'targetAttribute' => ['id_parent' => 'id']],
+            [['title', 'slug'], 'trim'],
+            [['title', 'slug'], 'unique'],
+            [['title', 'slug'], 'string', 'min' => 2, 'max' => 255],
+            [['title', 'slug', 'income'], 'required'],
+            ['income', 'boolean'],
+            ['id_parent', 'default', 'value' => null],
+            ['id_parent', 'integer'],
+            [
+                'id_parent',
+                'compare',
+                'compareAttribute' => 'id',
+                'operator' => '!==',
+                'type' => 'number',
+                'message' => 'Категория не может быть вложена в себя.'
+            ]
         ];
     }
 
@@ -46,7 +57,8 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'title' => 'Title',
+            'slug' => 'Slug',
             'income' => 'Income',
             'id_parent' => 'Parent',
         ];

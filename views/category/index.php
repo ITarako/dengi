@@ -18,17 +18,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Category', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'name',
+            'title',
+            'slug',
             [
                 'attribute' => 'Parent',
                 'value' => function($category) {
-                    return $category->parent ? $category->parent->name : null;
+                    return $category->parent ? $category->parent->title : null;
                 }
             ],
             'income:boolean',

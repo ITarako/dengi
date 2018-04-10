@@ -42,8 +42,8 @@ AppAsset::register($this);
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Register', 'url' => ['/site/register']],
-            ['label' => 'Category', 'url' => ['/category/index']],
-            ['label' => 'Account', 'url' => ['/account/index']],
+            ['label' => 'Categories', 'url' => ['/category/index']],
+            ['label' => 'Accounts', 'url' => ['/account/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -72,8 +72,6 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Igor Tarasenko & Sergey Dorgavtsev <?= date('Y') ?></p>
-
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>

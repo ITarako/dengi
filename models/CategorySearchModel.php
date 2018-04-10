@@ -19,7 +19,7 @@ class CategorySearchModel extends Category
     {
         return [
             [['id', 'id_parent'], 'integer'],
-            [['name'], 'safe'],
+            [['title', 'slug'], 'safe'],
             [['income'], 'boolean'],
         ];
     }
@@ -65,7 +65,8 @@ class CategorySearchModel extends Category
             'id_parent' => $this->id_parent,
         ]);
 
-        $query->andFilterWhere(['ilike', 'name', $this->name]);
+        $query->andFilterWhere(['ilike', 'title', $this->title])
+            ->andFilterWhere(['ilike', 'slug', $this->slug]);
 
         return $dataProvider;
     }
