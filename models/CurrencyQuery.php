@@ -7,7 +7,7 @@ namespace app\models;
  *
  * @see Currency
  */
-class CurrenciesQuery extends \yii\db\ActiveQuery
+class CurrencyQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

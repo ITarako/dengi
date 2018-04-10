@@ -58,10 +58,10 @@ class Currency extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return CurrenciesQuery the active query used by this AR class.
+     * @return CurrencyQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new CurrenciesQuery(get_called_class());
+        return new CurrencyQuery(get_called_class());
     }
 }
