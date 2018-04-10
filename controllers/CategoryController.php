@@ -73,7 +73,6 @@ class CategoryController extends Controller
 
         //$data = Yii::$app->db->createCommand("SELECT id, name FROM categories WHERE id_parent IS NULL")->queryAll();
         $data = Category::find()->where('id_parent IS NULL')->all();
-
         $categories = ArrayHelper::map($data, 'id', 'name');
         $categories[null]='--non set--';
 
@@ -98,8 +97,14 @@ class CategoryController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $data = Category::find()->where('id_parent IS NULL')->all();
+        $categories = ArrayHelper::map($data, 'id', 'name');
+        unset($categories[$id]);
+        $categories[null]='--non set--';
+
         return $this->render('update', [
             'model' => $model,
+            'categories' => $categories
         ]);
     }
 

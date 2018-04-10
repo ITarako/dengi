@@ -31,7 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'income:boolean',
-            'id_parent',
+            [
+                'label' => 'Parent',
+                'value' => $model->parent ? $model->parent->name : null
+            ]
         ],
     ]) ?>
 

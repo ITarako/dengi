@@ -18,7 +18,7 @@ class CategorySearchModel extends Category
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'id_parent'], 'integer'],
             [['name'], 'safe'],
             [['income'], 'boolean'],
         ];
@@ -62,10 +62,10 @@ class CategorySearchModel extends Category
         $query->andFilterWhere([
             'id' => $this->id,
             'income' => $this->income,
+            'id_parent' => $this->id_parent,
         ]);
 
-        $query
-            ->andFilterWhere(['ilike', 'name', $this->name]);
+        $query->andFilterWhere(['ilike', 'name', $this->name]);
 
         return $dataProvider;
     }
