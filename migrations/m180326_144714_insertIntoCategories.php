@@ -13,54 +13,55 @@ class m180326_144714_insertIntoCategories extends Migration
      */
     public function safeUp()
     {
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Автомобиль', 0, null],
-            ['Еда', 0, null],
-            ['Траты на жизнь', 0, null],
-            ['Дом, семья', 0, null],
-            ['Здоровье, красота', 0, null],
-            ['Банковские проценты', 1, null],
-            ['Зарплата', 1, null],
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income'], [
+            ['Автомобиль', 'car', 0],
+            ['Еда', 'food', 0],
+            ['Траты на жизнь', 'spending-on-life', 0],
+            ['Дом, семья', 'house,family', 0],
+            ['Здоровье, красота', 'health,beauty', 0],
+            ['Банковские проценты', 'bank-interest', 1],
+            ['Зарплата', 'salary',1],
         ]);
 
-        $tmp = Category::findOne(['name' => 'Автомобиль']);
+        $tmp = Category::findOne(['slug' => 'car']);
         $id = $tmp['id'];
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Бензин', 0, $id],
-            ['Обслуживание авто', 0, $id]
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income', 'id_parent'], [
+            ['Бензин', 'petrol',0, $id],
+            ['Обслуживание авто', 'car-service',0, $id]
         ]);
 
-        $tmp = Category::findOne(['name' => 'Еда']);
+        $tmp = Category::findOne(['slug' => 'food']);
         $id = $tmp['id'];
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Продукты', 0, $id],
-            ['Обеды, перекусы', 0, $id]
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income', 'id_parent'], [
+            ['Продукты', 'products',0 , $id],
+            ['Обеды, перекусы', 'lunches,snacks',0 , $id]
         ]);
 
-        $tmp = Category::findOne(['name' => 'Траты на жизнь']);
+        $tmp = Category::findOne(['slug' => 'spending-on-life']);
         $id = $tmp['id'];
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Интернет, связь', 0, $id],
-            ['Одежда', 0, $id],
-            ['Подарки', 0, $id],
-            ['Отдых', 0, $id],
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income', 'id_parent'], [
+            ['Интернет', 'internet',0 , $id],
+            ['Телефон', 'phone',0 , $id],
+            ['Одежда', 'clothes',0 , $id],
+            ['Подарки', 'gifts',0 , $id],
+            ['Отдых', 'rest',0 , $id],
         ]);
 
-        $tmp = Category::findOne(['name' => 'Дом, семья']);
+        $tmp = Category::findOne(['slug' => 'house,family']);
         $id = $tmp['id'];
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Хозтовары', 0, $id],
-            ['Квартплата', 0, $id],
-            ['Дети', 0, $id],
-            ['Родителям', 0, $id],
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income', 'id_parent'], [
+            ['Хозтовары', 'household-goods',0 , $id],
+            ['Квартплата', 'rent',0 , $id],
+            ['Дети', 'childs',0 , $id],
+            ['Родителям', 'parents',0 , $id],
         ]);
 
-        $tmp = Category::findOne(['name' => 'Здоровье, красота']);
+        $tmp = Category::findOne(['slug' => 'health,beauty']);
         $id = $tmp['id'];
-        $this->batchInsert('{{%categories}}', ['name', 'income', 'id_parent'], [
-            ['Аптека, препараты', 0, $id],
-            ['Лечение', 0, $id],
-            ['Спорт', 0, $id],
+        $this->batchInsert('{{%categories}}', ['title', 'slug', 'income', 'id_parent'], [
+            ['Аптека, препараты', 'pharmacy,drugs',0 , $id],
+            ['Лечение', 'therapy',0 , $id],
+            ['Спорт', 'sport',0 , $id],
         ]);
     }
 

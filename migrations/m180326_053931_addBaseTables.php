@@ -23,15 +23,16 @@ class m180326_053931_addBaseTables extends Migration
 
         $this->createTable('{{%categories}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
+            'title' => $this->string()->notNull()->unique(),
+            'slug' => $this->string()->notNull()->unique(),
             'income' => $this->boolean()->notNull(),
             'id_parent' => $this->integer()->defaultValue(null),
         ]);
 
         $this->createTable('{{%currencies}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string(50)->notNull(),
-            'code' => $this->string(3)->notNull(),
+            'title' => $this->string(50)->notNull()->unique(),
+            'code' => $this->string(3)->notNull()->unique(),
         ]);
 
         /* $this->createIndex(
@@ -42,7 +43,7 @@ class m180326_053931_addBaseTables extends Migration
 
         $this->createTable('{{%accounts}}', [
             'id' => $this->primaryKey(),
-            'name' => $this->string()->notNull(),
+            'title' => $this->string()->notNull(),
             'value' => $this->integer()->defaultValue(0),
             'id_user' => $this->integer()->notNull(),
             'id_currency' => $this->integer()->notNull()

@@ -12,7 +12,7 @@ class m180326_144715_insertIntoCurrenciesAndUsers extends Migration
      */
     public function safeUp()
     {
-        $this->batchInsert('{{%currencies}}', ['name', 'code'], [
+        $this->batchInsert('{{%currencies}}', ['title', 'code'], [
             ['Euro', 'EUR'],
             ['US Dollar', 'USD'],
             ['Russian Ruble', 'RUB'],
