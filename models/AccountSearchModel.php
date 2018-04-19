@@ -18,8 +18,8 @@ class AccountSearchModel extends Account
     public function rules()
     {
         return [
-            [['id', 'value', 'id_user'], 'integer'],
-            [['name', 'currency'], 'safe'],
+            [['id', 'value', 'id_user', 'id_currency'], 'integer'],
+            [['title'], 'safe'],
         ];
     }
 
@@ -62,10 +62,10 @@ class AccountSearchModel extends Account
             'id' => $this->id,
             'value' => $this->value,
             'id_user' => $this->id_user,
+            'id_currency' => $this->id_currency,
         ]);
 
-        $query->andFilterWhere(['ilike', 'name', $this->name])
-            ->andFilterWhere(['ilike', 'currency', $this->currency]);
+        $query->andFilterWhere(['ilike', 'title', $this->title]);
 
         return $dataProvider;
     }

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CategorySearchModelAccount */
+/* @var $searchModel app\models\AccountSearchModel */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Accounts';
@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'name',
+            'title',
             'value',
-            'currency',
+            'id_currency',
             [
                 'attribute' => 'Users',
                 'value' => function($account) {

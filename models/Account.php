@@ -8,11 +8,12 @@ use Yii;
  * This is the model class for table "accounts".
  *
  * @property int $id
- * @property string $name
+ * @property string $title
  * @property int $value
- * @property string $currency
  * @property int $id_user
+ * @property int $id_currency
  *
+ * @property Currencies $currency
  * @property Users $user
  * @property Operations[] $operations
  */
@@ -32,10 +33,11 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'currency', 'id_user'], 'required'],
-            [['value', 'id_user'], 'default', 'value' => null],
-            [['value', 'id_user'], 'integer'],
-            [['name', 'currency'], 'string', 'max' => 255],
+            [['title', 'id_user', 'id_currency'], 'required'],
+            [['value', 'id_user', 'id_currency'], 'default', 'value' => null],
+            [['value', 'id_user', 'id_currency'], 'integer'],
+            [['title'], 'string', 'max' => 255],
+            [['id_currency'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::className(), 'targetAttribute' => ['id_currency' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -47,11 +49,19 @@ class Account extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'title' => 'Title',
             'value' => 'Value',
-            'currency' => 'Currency',
             'id_user' => 'Id User',
+            'id_currency' => 'Id Currency',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(Currency::className(), ['id' => 'id_currency']);
     }
 
     /**
