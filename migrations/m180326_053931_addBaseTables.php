@@ -70,6 +70,7 @@ class m180326_053931_addBaseTables extends Migration
         $this->createTable('{{%operations}}', [
             'id' => $this->primaryKey(),
             'value' => $this->integer()->notNull(),
+            'dt' => 'timestamp with time zone',
             'id_account' => $this->integer()->notNull(),
             'id_category' => $this->integer()->notNull()
         ]);
