@@ -16,9 +16,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'dt')->textInput() ?>
 
-    <?= $form->field($model, 'id_account')->textInput() ?>
+    <?= $form->field($model, 'id_account')->dropDownList($accounts, ['prompt'=>'Выберите счет']) ?>
 
-    <?= $form->field($model, 'id_category')->textInput() ?>
+    <?= $form->field($model, 'id_category')->dropDownList($categories, ['prompt'=>'Выберите категорию']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
