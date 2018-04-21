@@ -94,7 +94,7 @@ class CategoryController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $categories = $this->categoriesList();
+        $categories = static::categoriesList();
         unset($categories[$id]);
 
         return $this->render('update', [
@@ -133,7 +133,7 @@ class CategoryController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    protected function categoriesList()
+    static public function categoriesList()
     {
         $data = Category::find()->where('id_parent IS NULL')->all();
         $categories = ArrayHelper::map($data, 'id', 'title');
