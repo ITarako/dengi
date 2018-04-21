@@ -17,9 +17,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'value')->textInput() ?>
 
     <?= Html::activeHiddenInput($model, 'id_user',['value'=>$id_user]) ?>
-<?=$id_user?>
 
-    <?= $form->field($model, 'id_currency')->textInput() ?>
+    <?= $form->field($model, 'id_currency')->dropDownList($currencies, ['prompt'=>'Выберите валюту']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

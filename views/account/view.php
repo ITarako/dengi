@@ -31,8 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'value',
-            'id_user',
-            'id_currency',
+            [
+                'label' => 'Currency',
+                'value' => $model->currency ? $model->currency->title : null
+            ],
+            [
+                'label' => 'User',
+                'value' => $model->user ? $model->user->username : null
+            ],
         ],
     ]) ?>
 

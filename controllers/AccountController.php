@@ -5,9 +5,11 @@ namespace app\controllers;
 use Yii;
 use app\models\Account;
 use app\models\AccountSearchModel;
+use app\models\Currency;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -69,11 +71,14 @@ class AccountController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
-        $id_user = Yii::$app->user->identity->id;   // правильно ли так получать id текущего пользователя
+
+        $currencies = $this->currenciesList();
+        $id_user = Yii::$app->user->id;
 
         return $this->render('create', [
             'model' => $model,
             'id_user' => $id_user,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -92,8 +97,13 @@ class AccountController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $currencies = $this->currenciesList();
+        $id_user = Yii::$app->user->id;
+
         return $this->render('update', [
             'model' => $model,
+            'id_user' => $id_user,
+            'currencies' => $currencies,
         ]);
     }
 
@@ -125,5 +135,13 @@ class AccountController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    protected function currenciesList()
+    {
+        $data = Currency::find()->all();
+        $currencies = ArrayHelper::map($data, 'id', 'title');
+        asort($currencies);
+        return $currencies;
     }
 }

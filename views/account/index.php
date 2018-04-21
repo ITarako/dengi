@@ -28,9 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'value',
-            'id_currency',
             [
-                'attribute' => 'Users',
+                'attribute' => 'Currency',
+                'value' => function($account) {
+                    return $account->currency ? $account->currency->code : null;
+                }
+            ],
+            [
+                'attribute' => 'User',
                 'value' => function($account) {
                     return $account->user->username;
                 },

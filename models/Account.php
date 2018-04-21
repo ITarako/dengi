@@ -13,8 +13,8 @@ use Yii;
  * @property int $id_user
  * @property int $id_currency
  *
- * @property Currencies $currency
- * @property Users $user
+ * @property Currency $currency
+ * @property User $user
  * @property Operations[] $operations
  */
 class Account extends \yii\db\ActiveRecord
@@ -52,7 +52,7 @@ class Account extends \yii\db\ActiveRecord
             'title' => 'Title',
             'value' => 'Value',
             'id_user' => 'Id User',
-            'id_currency' => 'Id Currency',
+            'id_currency' => 'Currency',
         ];
     }
 
