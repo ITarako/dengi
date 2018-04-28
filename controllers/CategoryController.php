@@ -71,7 +71,7 @@ class CategoryController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $categories = $this->categoriesList();
+        $categories = static::categoriesList();
 
         return $this->render('create', [
             'model' => $model,

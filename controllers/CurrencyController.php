@@ -8,6 +8,7 @@ use app\models\CurrencySearchModel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * CurrencyController implements the CRUD actions for Currency model.
@@ -123,5 +124,13 @@ class CurrencyController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    static public function currenciesList()
+    {
+        $data = Currency::find()->all();
+        $currencies = ArrayHelper::map($data, 'id', 'title');
+        asort($currencies);
+        return $currencies;
     }
 }

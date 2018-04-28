@@ -3,13 +3,11 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Account;
 use app\models\Operation;
 use app\models\OperationSearchModel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 
 /**
  * OperationController implements the CRUD actions for Operation model.
@@ -72,7 +70,7 @@ class OperationController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $accounts = $this->accountsListOfUser();
+        $accounts = AccountController::accountsListOfUser();
         $categories = CategoryController::categoriesList();
 
         return $this->render('create', [
@@ -130,12 +128,5 @@ class OperationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-    protected function accountsListOfUser()
-    {
-        $data = Account::find()->where('id_user='.Yii::$app->user->id)->all();
-        $accounts = ArrayHelper::map($data, 'id', 'title');
-        asort($accounts);
-        return $accounts;
     }
 }
