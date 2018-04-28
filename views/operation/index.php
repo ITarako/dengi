@@ -28,8 +28,25 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'value',
             'dt',
-            'id_account',
-            'id_category',
+            [
+                'attribute' => 'Category',
+                'value' => function($operation) {
+                    return $operation->category ? $operation->category->title : null;
+                }
+            ],
+            [
+                'attribute' => 'Account',
+                'value' => function($operation) {
+                    return $operation->account ? $operation->account->title : null;
+                }
+            ],
+            [
+                'attribute' => 'User',
+                'value' => function($operation) {
+                    return $operation->user ? $operation->user->username : null;
+                }
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
