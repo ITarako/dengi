@@ -24,7 +24,8 @@ use \kartik\date\DatePicker;
     <?= $form->field($model, 'operation_date')->widget(DatePicker::classname(),[
         'options' => ['placeholder' => 'Введите дату операции'],
         'pluginOptions' => [
-            'autoclose'=>true,
+            'autoclose' => true,
+            'format' => 'yyyy-mm-dd'
         ]
     ]) ?>
 

@@ -95,8 +95,13 @@ class OperationController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $accounts = AccountController::accountsListOfUser();
+        $categories = CategoryController::categoriesList();
+
         return $this->render('update', [
             'model' => $model,
+            'accounts' => $accounts,
+            'categories' => $categories,
         ]);
     }
 
