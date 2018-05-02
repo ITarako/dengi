@@ -28,6 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'value',
+            [
+                'attribute' => 'Currency',
+                'value' => function($operation) {
+                    return $operation->currency ? $operation->currency->code : null;
+                }
+            ],
             'operation_date',
             [
                 'attribute' => 'Category',

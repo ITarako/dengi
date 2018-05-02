@@ -85,6 +85,15 @@ class Operation extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(Currency::className(), ['id' => 'id_currency'])
+        ->viaTable('accounts', ['id'=>'id_account']);
+    }
+
+    /**
      * @inheritdoc
      * @return OperationQuery the active query used by this AR class.
      */
