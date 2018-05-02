@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Operation */
 
-$this->title = $model->id;
+$this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Operations', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,8 +32,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'value',
             'operation_date',
-            'id_account',
-            'id_category',
+            [
+                'label' => 'Category',
+                'value' => $model->category ? $model->category->title : null
+            ],
+            [
+                'label' => 'Account',
+                'value' => $model->account ? $model->account->title : null
+            ],
+            [
+                'label' => 'User',
+                'value' => $model->user ? $model->user->username : null
+            ],
         ],
     ]) ?>
 
