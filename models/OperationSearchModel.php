@@ -19,7 +19,8 @@ class OperationSearchModel extends Operation
     {
         return [
             [['id', 'value', 'id_account', 'id_category'], 'integer'],
-            [['dt'], 'safe'],
+            [['title'], 'string'],
+            [['operation_date'], 'safe'],
         ];
     }
 
@@ -60,8 +61,9 @@ class OperationSearchModel extends Operation
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'title' => $this->title,
             'value' => $this->value,
-            'dt' => $this->dt,
+            'operation_date' => $this->operation_date,
             'id_account' => $this->id_account,
             'id_category' => $this->id_category,
         ]);

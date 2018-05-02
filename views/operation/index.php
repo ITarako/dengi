@@ -26,8 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'title',
             'value',
-            'dt',
+            'operation_date',
             [
                 'attribute' => 'Category',
                 'value' => function($operation) {

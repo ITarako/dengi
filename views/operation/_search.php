@@ -17,9 +17,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'title') ?>
+
     <?= $form->field($model, 'value') ?>
 
-    <?= $form->field($model, 'dt') ?>
+    <?= $form->field($model, 'operation_date') ?>
 
     <?= $form->field($model, 'id_account') ?>
 

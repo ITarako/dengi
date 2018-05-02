@@ -8,8 +8,9 @@ use Yii;
  * This is the model class for table "operations".
  *
  * @property int $id
+ * @property string $title
  * @property int $value
- * @property string $dt
+ * @property string $operation_date
  * @property int $id_account
  * @property int $id_category
  *
@@ -32,10 +33,12 @@ class Operation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value', 'id_account', 'id_category'], 'required'],
-            [['value', 'id_account', 'id_category'], 'default', 'value' => null],
+            [['title', 'value', 'id_account', 'id_category'], 'required'],
+            [['title', 'value', 'id_account', 'id_category'], 'default', 'value' => null],
             [['value', 'id_account', 'id_category'], 'integer'],
-            [['dt'], 'safe'],
+            [['title'], 'trim'],
+            [['title'], 'string', 'min' => 2, 'max' => 255],
+            [['operation_date'], 'safe'],
             [['id_account'], 'exist', 'skipOnError' => true, 'targetClass' => Account::className(), 'targetAttribute' => ['id_account' => 'id']],
             [['id_category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['id_category' => 'id']],
         ];
@@ -48,8 +51,9 @@ class Operation extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'title' => 'Title',
             'value' => 'Value',
-            'dt' => 'Datetime',
+            'operation_date' => 'Date',
             'id_account' => 'Account',
             'id_category' => 'Category',
         ];

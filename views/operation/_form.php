@@ -13,14 +13,15 @@ use \kartik\date\DatePicker;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'value')->textInput() ?>
+    <?= $form->field($model, 'title')->textInput() ?>
 
+    <?= $form->field($model, 'value')->textInput() ?>
 
     <?= $form->field($model, 'id_account')->dropDownList($accounts, ['prompt'=>'Выберите счет']) ?>
 
     <?= $form->field($model, 'id_category')->dropDownList($categories, ['prompt'=>'Выберите категорию']) ?>
 
-    <?= $form->field($model, 'dt')->widget(DatePicker::classname(),[
+    <?= $form->field($model, 'operation_date')->widget(DatePicker::classname(),[
         'options' => ['placeholder' => 'Введите дату операции'],
         'pluginOptions' => [
             'autoclose'=>true,
