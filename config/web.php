@@ -50,6 +50,10 @@ $config = [
                 //'about' => 'site/about'
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            'defaultRoles' => ['guest'],
+        ],
     ],
     'params' => $params,
     'name' => 'Dengi'
