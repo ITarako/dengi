@@ -48,6 +48,13 @@ class RegisterForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
 
-        return $user->save() ? $user : null;
+        if($user->save()){
+            $rbac = Yii::$app->authManager;
+            $userRole = $rbac->getRole('user');
+            $rbac->assign($userRole, $user->id);
+            return $user;
+        }
+
+        return null;
     }
 }
