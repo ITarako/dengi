@@ -76,8 +76,18 @@ class OperationController extends Controller
     {
         $model = new Operation();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())){
+            $transaction = Yii::$app->db->beginTransaction();
+            try{
+                if($model->save()) {
+                    $account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];
+                    \Yii::$app->db->createCommand("UPDATE accounts SET value=$account_value+{$model->value} WHERE id={$model->id_account}")->execute();
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }catch(\Throwable $e){
+                $transaction->rollBack();
+            }
         }
 
         $accounts = AccountController::accountsListOfUser();
