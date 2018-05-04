@@ -137,6 +137,21 @@ class AccountController extends Controller
      * @return Account the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+
+    public function actionChart()
+    {
+        $data = Account::find()->where('id_user='.Yii::$app->user->id)->all();
+        $accounts = ArrayHelper::map($data, 'id', 'title');
+
+        $operations = [];
+        foreach($accounts as $id_account=>$title){
+            $operations[$title]=OperationController::findOperationsOfAccount($id_account);
+        }
+
+        return $this->render('chart', [
+            'operations' =>$operations,
+        ]);
+    }
     protected function findModel($id)
     {
         if (($model = Account::findOne($id)) !== null) {

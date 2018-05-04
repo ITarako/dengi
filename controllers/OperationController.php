@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 /**
  * OperationController implements the CRUD actions for Operation model.
@@ -180,5 +181,12 @@ class OperationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    static public function findOperationsOfAccount($id_account)
+    {
+        $data = Operation::find()->where("id_account=$id_account")->all();
+        $operations = ArrayHelper::map($data, 'operation_date', 'value');
+        return $operations;
     }
 }
