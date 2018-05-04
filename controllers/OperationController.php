@@ -110,9 +110,22 @@ class OperationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old_value = $model->value;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())){
+            $transaction = Yii::$app->db->beginTransaction();
+            try{
+                if($model->save()) {
+                    $old_account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];
+                    $new_account_value = $old_account_value-$old_value+$model->value;
+                    \Yii::$app->db->createCommand("UPDATE accounts SET value=$new_account_value WHERE id={$model->id_account}")->execute();
+                    $transaction->commit();
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }catch(\Throwable $e){
+                $transaction->rollBack();
+                throw $e;
+            }
         }
 
         $accounts = AccountController::accountsListOfUser();
