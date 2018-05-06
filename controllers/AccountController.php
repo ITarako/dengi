@@ -143,13 +143,14 @@ class AccountController extends Controller
         $data = Account::find()->where('id_user='.Yii::$app->user->id)->all();
         $accounts = ArrayHelper::map($data, 'id', 'title');
 
-        $operations = [];
+        $operationsByAccount = [];
         foreach($accounts as $id_account=>$title){
-            $operations[$title]=OperationController::findOperationsOfAccount($id_account);
+            $operations = OperationController::findOperationsOfAccount($id_account);
+            $operationsByAccount[$title] = $this->splitValueByMonths($operations);
         }
 
         return $this->render('chart', [
-            'operations' =>$operations,
+            'operationsByAccount' => $operationsByAccount,
         ]);
     }
     protected function findModel($id)
@@ -167,5 +168,51 @@ class AccountController extends Controller
         $accounts = ArrayHelper::map($data, 'id', 'title');
         asort($accounts);
         return $accounts;
+    }
+
+    /**
+     * Takes an array of operations and splits them by months
+     * @param array $operations
+     * @return array value by months
+     *
+     */
+    public function splitValueByMonths($operations)
+    {
+        $months = [
+            'January' => 0,
+            'February' => 0,
+            'March' => 0,
+            'April' => 0,
+            'May' => 0,
+            'June' => 0,
+            'July' => 0,
+            'August' => 0,
+            'September' => 0,
+            'October' => 0,
+            'November' => 0,
+            'December' => 0,
+        ];
+
+        foreach($operations as $oper){
+            $m = explode('-', $oper['operation_date'])[1];
+
+            switch($m){
+                case '01': $months['January'] += $oper['value']; break;
+                case '02': $months['February'] += $oper['value']; break;
+                case '03': $months['March'] += $oper['value']; break;
+                case '04': $months['April'] += $oper['value']; break;
+                case '05': $months['May'] += $oper['value']; break;
+                case '06': $months['June'] += $oper['value']; break;
+                case '07': $months['July'] += $oper['value']; break;
+                case '08': $months['August'] += $oper['value']; break;
+                case '09': $months['September'] += $oper['value']; break;
+                case '10': $months['October'] += $oper['value']; break;
+                case '11': $months['November'] += $oper['value']; break;
+                case '12': $months['December'] += $oper['value']; break;
+                default: break;
+            }
+        }
+
+        return $months;
     }
 }
