@@ -185,8 +185,6 @@ class OperationController extends Controller
 
     static public function findOperationsOfAccount($id_account)
     {
-        $data = Operation::find()->where("id_account=$id_account")->all();
-        $operations = ArrayHelper::map($data, 'operation_date', 'value');
-        return $operations;
+        return Operation::find()->where("id_account=$id_account")->asArray()->all();
     }
 }
