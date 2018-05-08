@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use app\lib\Chart;
 
 /**
  * AccountController implements the CRUD actions for Account model.
@@ -149,8 +150,11 @@ class AccountController extends Controller
             $operationsByAccount[$title] = $this->splitValueByMonths($operations);
         }
 
+        $chart = new Chart($operationsByAccount);
+        $data = $chart->data;
+
         return $this->render('chart', [
-            'operationsByAccount' => $operationsByAccount,
+            'data' => $data,
         ]);
     }
     protected function findModel($id)
