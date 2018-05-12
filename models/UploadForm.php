@@ -23,7 +23,7 @@ class UploadForm extends Model
     public function upload()
     {
         if ($this->validate()) {
-            $this->operationsFile->saveAs('uploads/' . $this->operationsFile->baseName . '.' . $this->operationsFile->extension);
+            $this->operationsFile->saveAs('uploads/operations/' . $this->operationsFile->baseName . '.' . $this->operationsFile->extension);
             return true;
         } else {
             return false;
