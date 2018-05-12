@@ -5,8 +5,10 @@ namespace app\controllers;
 use Yii;
 use app\models\Operation;
 use app\models\OperationSearchModel;
+use app\models\UploadForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -150,7 +152,6 @@ class OperationController extends Controller
      */
     public function actionDelete($id)
     {
-        #$this->findModel($id)->delete();
         $model = $this->findModel($id);
         $transaction = Yii::$app->db->beginTransaction();
         try{
@@ -165,6 +166,20 @@ class OperationController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->operationsFile = UploadedFile::getInstance($model, 'operationsFile');
+            if ($model->upload()) {
+                return $this->redirect(['index']);
+            }
+        }
+
+        return $this->render('upload', ['model' => $model]);
     }
 
     /**
