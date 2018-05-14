@@ -46,6 +46,7 @@ AppAsset::register($this);
             ['label' => 'Currencies', 'url' => ['/currency/index']],
             ['label' => 'Accounts', 'url' => ['/account/index']],
             ['label' => 'Operations', 'url' => ['/operation/index']],
+            ['label' => 'Uploads', 'url' => ['/upload/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
