@@ -54,7 +54,7 @@ class Upload extends \yii\db\ActiveRecord
             'filesize' => 'Filesize',
             'extension' => 'Extension',
             'path' => 'Path',
-            'uploaded_at' => 'Attached At',
+            'uploaded_at' => 'Uploaded At',
             'id_user' => 'Id User',
         ];
     }
