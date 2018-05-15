@@ -27,13 +27,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'filename',
-            'filesize',
             'extension',
-            'path',
-            //'uploaded_at',
-            //'id_user',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'filesize',
+            [
+                'attribute' => 'Path',
+                'format' => 'raw',
+                'value' => function($upload) {
+                    return Html::a('Source', '/' . $upload->path, ['class' => 'btn-small btn-link']);
+                }
+            ],
+            'uploaded_at',
+            [
+                'attribute' => 'User',
+                'value' => function($upload) {
+                    return $upload->user ? $upload->user->username : null;
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+            ],
         ],
     ]); ?>
 </div>
