@@ -53,7 +53,14 @@ class UploadController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $path = $model->path;
+
+        if ($model->delete()) {
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
 
         return $this->redirect(['index']);
     }
