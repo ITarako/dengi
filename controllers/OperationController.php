@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\Operation;
 use app\models\OperationSearchModel;
+use app\models\Category;
+use app\models\Account;
 use app\models\UploadForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -175,11 +177,32 @@ class OperationController extends Controller
         if (Yii::$app->request->isPost) {
             $model->operationsFile = UploadedFile::getInstance($model, 'operationsFile');
             if ($model->upload()) {
-                return $this->redirect(['index']);
+                return $this->redirect(['upload/index']);
             }
         }
 
         return $this->render('upload', ['model' => $model]);
+    }
+
+    public function actionParse($path)
+    {
+        $data = file_get_contents($path);
+        $data = json_decode($data, true);
+
+        foreach($data as $row){
+            $res = $row;
+            $res['id_category'] = Category::find()->where(['slug' => $row['slug']])->one()->id;
+            $res['id_account'] = Account::find()->where(['title' => $row['account_title']])->one()->id;
+            unset($res['slug']);
+            unset($res['account_title']);
+
+            $model = new Operation();
+            $model->attributes = $res;
+            $model->save();
+            break;
+        }
+
+        return $this->redirect(['index']);
     }
 
     /**
