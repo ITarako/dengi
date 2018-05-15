@@ -57,7 +57,6 @@ class Upload extends \yii\db\ActiveRecord
             'extension' => 'Extension',
             'path' => 'Path',
             'uploaded_at' => 'Uploaded At',
-            'id_user' => 'Id User',
         ];
     }
 
@@ -81,9 +80,24 @@ class Upload extends \yii\db\ActiveRecord
     public function afterFind()
     {
         parent::afterFind();
+
         $dateTime = new DateTime($this->uploaded_at);
         // TODO: После добаления указания таймзоны пользователем, изменять таймзону на соответствующую
         $dateTime->setTimeZone(new DateTimeZone('Asia/Barnaul'));
         $this->uploaded_at = $dateTime->format('Y-m-d H:i');
+
+        $size = $this->filesize;
+        if ($size < 1024) {
+            $size .= ' B';
+        } elseif ($size < 1024*1024) {
+            $size /= 1024;
+            $size = number_format($size, 2);
+            $size .= ' KB';
+        } else {
+            $size /= 1024*1024;
+            $size = number_format($size, 2);
+            $size .= ' MB';
+        }
+        $this->filesize = $size;
     }
 }
