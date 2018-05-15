@@ -44,6 +44,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'Action',
+                'format' => 'raw',
+                'value' => function($upload) {
+                    if (explode('/', $upload->path)[1] === 'operations')
+                        return Html::a('Parse', ['/operation/parse', 'path' => $upload->path], ['class' => 'btn-small btn-success']);
+                    else
+                        return null;
+                }
+
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}',
             ],
