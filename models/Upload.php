@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use DateTime;
+use DateTimeZone;
 
 /**
  * This is the model class for table "uploads".
@@ -74,5 +76,14 @@ class Upload extends \yii\db\ActiveRecord
     public static function find()
     {
         return new UploadQuery(get_called_class());
+    }
+
+    public function afterFind()
+    {
+        parent::afterFind();
+        $dateTime = new DateTime($this->uploaded_at);
+        // TODO: После добаления указания таймзоны пользователем, изменять таймзону на соответствующую
+        $dateTime->setTimeZone(new DateTimeZone('Asia/Barnaul'));
+        $this->uploaded_at = $dateTime->format('Y-m-d H:i');
     }
 }
