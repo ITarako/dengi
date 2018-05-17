@@ -4,7 +4,7 @@ namespace app\lib;
 
 class Utils
 {
-    static public function guidv4()
+    static public function guidv4() :string
     {
         if (function_exists('com_create_guid') === true)
             return trim(com_create_guid(), '{}');

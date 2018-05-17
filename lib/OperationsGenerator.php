@@ -36,12 +36,12 @@ class OperationsGenerator
         ['slug' => 'salary', 'title' => 'Остаток']
     ];
 
-    public function __construct($account_title)
+    public function __construct(string $account_title)
     {
         $this->account_title = $account_title;
     }
 
-    public function generateRow()
+    public function generateRow() :array
     {
         $ct = count($this->operations);
         $op_number = rand(0, $ct-1);
@@ -69,24 +69,26 @@ class OperationsGenerator
         return $res;
     }
 
-    public static function generateDate()
+    public static function generateDate() :string
     {
         $today = date("Y-m-d");
         list($todayY, $todayM, $todayD) = explode('-', $today);
 
         $d = rand(1, 28);
-        if ($d < 10)
+        if ($d < 10) {
             $d = '0'.$d;
+        }
 
         $m = rand(1, $todayM);
-        if ($m < 10)
+        if ($m < 10) {
             $m = '0'.$m;
+        }
 
         return "$todayY-$m-$d";
     }
 
 
-    public function getJsonOperations($count)
+    public function getJsonOperations(int $count) :string
     {
         $res = [];
         for ($i = 0; $i <= $count; $i++) {

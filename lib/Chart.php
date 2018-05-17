@@ -10,7 +10,7 @@ class Chart
         'datasets'=> [],
     ];
 
-    public function __construct($operationsByAccount){
+    public function __construct(array $operationsByAccount){
         $this->data['labels'] = array_keys(current($operationsByAccount));
 
         foreach($operationsByAccount as $account => $operation){
@@ -18,9 +18,9 @@ class Chart
         }
     }
 
-    static public function createDatasetFromOperation($account, $operation)
+    static public function createDatasetFromOperation(string $account, array $operation) :array
     {
-        list($r, $g, $b) = static::generateRGB();
+        [$r, $g, $b] = static::generateRGB();
         $dataset = [];
         $dataset['label'] = $account;
         $dataset['data'] = array_values($operation);
@@ -34,7 +34,7 @@ class Chart
         return $dataset;
     }
 
-    static public function generateRGB()
+    static public function generateRGB() :array
     {
         $r = rand(0,255);
         $g = rand(0,255);
