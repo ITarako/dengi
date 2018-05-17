@@ -10,10 +10,12 @@ use app\models\Account;
 use app\models\UploadForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\base\ErrorException;
 
 /**
  * OperationController implements the CRUD actions for Operation model.
@@ -81,17 +83,17 @@ class OperationController extends Controller
     {
         $model = new Operation();
 
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
-            try{
-                if($model->save()) {
+            try {
+                if ($model->save()) {
                     $old_account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];
                     $new_account_value = $old_account_value+$model->value;
                     \Yii::$app->db->createCommand("UPDATE accounts SET value=$new_account_value WHERE id={$model->id_account}")->execute();
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
-            }catch(\Throwable $e){
+            } catch (\Throwable $e) {
                 $transaction->rollBack();
                 throw $e;
             }
@@ -119,17 +121,17 @@ class OperationController extends Controller
         $model = $this->findModel($id);
         $old_value = $model->value;
 
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
-            try{
-                if($model->save()) {
+            try {
+                if ($model->save()) {
                     $old_account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];
                     $new_account_value = $old_account_value-$old_value+$model->value;
                     \Yii::$app->db->createCommand("UPDATE accounts SET value=$new_account_value WHERE id={$model->id_account}")->execute();
                     $transaction->commit();
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
-            }catch(\Throwable $e){
+            } catch (\Throwable $e) {
                 $transaction->rollBack();
                 throw $e;
             }
@@ -156,13 +158,13 @@ class OperationController extends Controller
     {
         $model = $this->findModel($id);
         $transaction = Yii::$app->db->beginTransaction();
-        try{
+        try {
             $old_account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];
             $new_account_value = $old_account_value-$model->value;
             $model->delete();
             \Yii::$app->db->createCommand("UPDATE accounts SET value=$new_account_value WHERE id={$model->id_account}")->execute();
             $transaction->commit();
-        }catch(\Throwable $e){
+        } catch (\Throwable $e) {
             $transaction->rollBack();
             throw $e;
         }
@@ -186,23 +188,32 @@ class OperationController extends Controller
 
     public function actionParse($path)
     {
-        $data = file_get_contents($path);
-        $data = json_decode($data, true);
+        [$data, $account_title] = $this->getDataFromOperationsFile($path);
 
-        foreach($data as $row){
-            $res = $row;
-            $res['id_category'] = Category::find()->where(['slug' => $row['slug']])->one()->id;
-            $res['id_account'] = Account::find()->where(['title' => $row['account_title']])->one()->id;
-            unset($res['slug']);
-            unset($res['account_title']);
+        $account = Account::find()->where(['id_user'=>Yii::$app->user->id, 'title' => $account_title])->one();
+        if(empty($account))
+            throw new BadRequestHttpException("Account '$account_title' not found");
 
-            $model = new Operation();
-            $model->attributes = $res;
-            $model->save();
-            break;
+        $categories = Category::find()->all();
+        $categories = ArrayHelper::Map($categories, 'slug', 'id');
+
+        [$rows, $total_value] = $this->validateDataItems($data, $categories, $account->id);
+
+        $cols = ['value', 'title', 'id_category', 'id_account', 'operation_date'];
+        $account->value+=$total_value;
+
+        $transaction = Yii::$app->db->beginTransaction();
+        try {
+            $account->save();
+            Yii::$app->db->createCommand()->batchInsert(Operation::tableName(), $cols, $rows)->execute();
+            $transaction->commit();
+
+            return $this->redirect(['index']);
+
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
         }
-
-        return $this->redirect(['index']);
     }
 
     /**
@@ -224,5 +235,51 @@ class OperationController extends Controller
     static public function findOperationsOfAccount($id_account)
     {
         return Operation::find()->where("id_account=$id_account")->asArray()->all();
+    }
+
+    public function getDataFromOperationsFile(string $path) :array
+    {
+        try {
+            $data = file_get_contents($path);
+            $data = json_decode($data, true);
+            $account_title = $data[0]['account_title'];
+
+            if(empty($account_title))
+                throw new ErrorException();
+
+        } catch (ErrorException $e) {
+            throw new BadRequestHttpException("$path not found or invalid");
+        }
+
+        return [$data, $account_title];
+    }
+
+    public function validateDataItems(array $data, array $categories, int $account_id) :array
+    {
+        $rows = [];
+        $total_value = 0;
+
+        foreach ($data as $item) {
+            $item['id_category'] = $categories[$item['slug']];
+            $item['id_account'] = $account_id;
+
+            $model = new Operation();
+            $model->attributes = $item;
+            if($model->validate()){
+                $total_value +=  $model->value;
+
+                $rows[] = [
+                    'value' => $model->value,
+                    'title' => $model->title,
+                    'id_category' => $model->id_category,
+                    'id_account' => $model->id_account,
+                    'operation_date' => $model->operation_date,
+                ];
+            } else {
+                throw new BadRequestHttpException("$item is invalid");
+            }
+        }
+
+        return [$rows, $total_value];
     }
 }
