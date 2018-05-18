@@ -2,11 +2,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\rbac\Role;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
-$this->title = $model->id;
+$this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,7 +33,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'username',
             'password_hash',
-            'status',
+            [
+                'label' => 'Status',
+                'value' => $model->status ? 'Active' : 'Disable'
+            ],
+            [
+                'label' => 'Role',
+                'value' => function($user) {
+                    $role = Yii::$app->authManager->getRolesByUser($user->id);
+                    $role = array_pop($role);
+                    return ($role instanceof Role) ? $role->name : '';
+                }
+            ],
             'auth_key',
         ],
     ]) ?>

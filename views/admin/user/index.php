@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\rbac\Role;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearchModel */
@@ -29,8 +30,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'username',
             'password_hash',
-            'status',
-            //'auth_key',
+            [
+                'attribute' => 'Status',
+                'value' => function($user) {
+                    return ($user->status) ? 'Active' : 'Disable';
+                }
+            ],
+            [
+                'attribute' => 'Role',
+                'value' => function($user) {
+                    $role = Yii::$app->authManager->getRolesByUser($user->id);
+                    $role = array_pop($role);
+                    return ($role instanceof Role) ? $role->name : '';
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
