@@ -11,6 +11,7 @@ use app\models\UploadForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\BadRequestHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -69,8 +70,15 @@ class OperationController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        if(!Yii::$app->user->can('admin')){
+            if($model->account->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -119,6 +127,12 @@ class OperationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        if(!Yii::$app->user->can('admin')){
+            if($model->account->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
         $old_value = $model->value;
 
         if ($model->load(Yii::$app->request->post())) {
@@ -157,6 +171,12 @@ class OperationController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+
+        if(!Yii::$app->user->can('admin')){
+            if($model->account->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
         $transaction = Yii::$app->db->beginTransaction();
         try {
             $old_account_value = \Yii::$app->db->createCommand("SELECT value FROM accounts WHERE id={$model->id_account}")->queryOne()['value'];

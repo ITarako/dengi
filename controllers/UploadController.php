@@ -7,6 +7,7 @@ use app\models\Upload;
 use app\models\UploadSearchModel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
@@ -64,8 +65,13 @@ class UploadController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $path = $model->path;
 
+        if(!Yii::$app->user->can('admin')){
+            if($model->id_user !== Yii::$app->user->id)
+            throw new ForbiddenHttpException();
+        }
+
+        $path = $model->path;
         if ($model->delete()) {
             if (file_exists($path)) {
                 unlink($path);

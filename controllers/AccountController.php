@@ -7,6 +7,7 @@ use app\models\Account;
 use app\models\AccountSearchModel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -64,8 +65,15 @@ class AccountController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        if(!Yii::$app->user->can('admin')){
+            if($model->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 
@@ -103,6 +111,11 @@ class AccountController extends Controller
     {
         $model = $this->findModel($id);
 
+        if(!Yii::$app->user->can('admin')){
+            if($model->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -126,7 +139,14 @@ class AccountController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        if(!Yii::$app->user->can('admin')){
+            if($model->id_user !== Yii::$app->user->id)
+                throw new ForbiddenHttpException();
+        }
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }
