@@ -58,6 +58,8 @@ class CategorySearchModel extends Category
             return $dataProvider;
         }
 
+        $query->with('parent');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

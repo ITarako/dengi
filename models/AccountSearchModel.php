@@ -57,6 +57,8 @@ class AccountSearchModel extends Account
             return $dataProvider;
         }
 
+        $query->with('currency', 'user');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

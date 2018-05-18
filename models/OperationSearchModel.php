@@ -58,6 +58,8 @@ class OperationSearchModel extends Operation
             return $dataProvider;
         }
 
+        $query->with('account', 'category', 'currency', 'user');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
