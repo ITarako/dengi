@@ -57,14 +57,15 @@ class AccountSearchModel extends Account
             return $dataProvider;
         }
 
+        if(!Yii::$app->user->can('admin'))
+            $query->andWhere(['id_user' => Yii::$app->user->id]);
+
         $query->with('currency', 'user');
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'value' => $this->value,
-            'id_user' => $this->id_user,
-            'id_currency' => $this->id_currency,
         ]);
 
         $query->andFilterWhere(['ilike', 'title', $this->title]);

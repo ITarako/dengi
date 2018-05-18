@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Operation;
+use yii\helpers\ArrayHelper;
 
 /**
  * OperationSearchModel represents the model behind the search form of `app\models\Operation`.
@@ -58,17 +59,22 @@ class OperationSearchModel extends Operation
             return $dataProvider;
         }
 
+        if (!Yii::$app->user->can('admin')) {
+            $accounts = Account::find()->where(['id_user' => Yii::$app->user->id])->asArray()->all();
+            $accounts = ArrayHelper::getColumn($accounts, 'id');
+            $query->andWhere(['in', 'id_account', $accounts]);
+        }
+
         $query->with('account', 'category', 'currency', 'user');
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'title' => $this->title,
             'value' => $this->value,
             'operation_date' => $this->operation_date,
-            'id_account' => $this->id_account,
-            'id_category' => $this->id_category,
         ]);
+
+        $query->andFilterWhere(['ilike', 'title', $this->title]);
 
         return $dataProvider;
     }

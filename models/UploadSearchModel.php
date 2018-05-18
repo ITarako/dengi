@@ -57,12 +57,14 @@ class UploadSearchModel extends Upload
             return $dataProvider;
         }
 
+        if(!Yii::$app->user->can('admin'))
+            $query->andWhere(['id_user' => Yii::$app->user->id]);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'filesize' => $this->filesize,
             'uploaded_at' => $this->uploaded_at,
-            'id_user' => $this->id_user,
         ]);
 
         $query->andFilterWhere(['ilike', 'filename', $this->filename])
