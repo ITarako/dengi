@@ -8,6 +8,7 @@ use app\models\UploadSearchModel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * UploadController implements the CRUD actions for Upload model.
@@ -26,6 +27,15 @@ class UploadController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['user']
+                    ]
+                ]
+            ]
         ];
     }
 

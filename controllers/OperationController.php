@@ -39,7 +39,7 @@ class OperationController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['user', 'admin']
+                        'roles' => ['user']
                     ]
                 ]
             ]
