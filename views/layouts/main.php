@@ -40,13 +40,24 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Register', 'url' => ['/site/register']],
-            ['label' => 'Categories', 'url' => ['/category/index']],
-            ['label' => 'Currencies', 'url' => ['/currency/index']],
-            ['label' => 'Accounts', 'url' => ['/account/index']],
-            ['label' => 'Operations', 'url' => ['/operation/index']],
-            ['label' => 'Uploads', 'url' => ['/upload/index']],
+            ['label' => 'Categories', 'url' => ['/category']],
+            ['label' => 'Currencies', 'url' => ['/currency']],
+
+            Yii::$app->user->can('user') ? (
+                ['label' => 'Accounts', 'url' => ['/account']]
+            ) : '',
+            Yii::$app->user->can('user') ? (
+                ['label' => 'Operations', 'url' => ['/operation']]
+            ) : '',
+            Yii::$app->user->can('user') ? (
+                ['label' => 'Uploads', 'url' => ['/upload']]
+            ) : '',
+            Yii::$app->user->can('admin') ? (
+                ['label' => 'Users', 'url' => ['/admin/user']]
+            ) : '',
+            Yii::$app->user->isGuest ? (
+                ['label' => 'Register', 'url' => ['/site/register']]
+            ) : '',
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
