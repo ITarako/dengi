@@ -14,6 +14,11 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <p>
+        <!-- смена пароля будет происходить в модальном окне с применением AJAX -->
+        <?= Html::a('Change Password', ['change'], ['class' => 'btn btn-success disabled']) ?>
+    </p>
+
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
