@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\rbac\Role;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -77,8 +78,33 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $postData = Yii::$app->request->post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (!empty($postData)) {
+            $model->load($postData);
+            $newRoleName = $postData['role'];
+
+            $role = Yii::$app->authManager->getRolesByUser($model->id);
+            $role = array_pop($role);
+            $oldRoleName = ($role instanceof Role) ? $role->name : '';
+
+            $rbac = Yii::$app->authManager;
+            $newRole = $rbac->getRole($newRoleName);
+            $oldRole = $rbac->getRole($oldRoleName);
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                if ($model->save()) {
+                    $rbac->revoke($oldRole, $model->id);
+                    $rbac->assign($newRole, $model->id);
+                    $transaction->commit();
+                }
+            } catch (\Throwable $e) {
+                $transaction->rollBack();
+                throw $e;
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
