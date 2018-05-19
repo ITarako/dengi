@@ -2,15 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\rbac\Role;
+use app\lib\Utils;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 /* @var $form yii\widgets\ActiveForm */
-$role = Yii::$app->authManager->getRolesByUser($model->id);
-$role = array_pop($role);
-$role = ($role instanceof Role) ? $role->name : '';
 
+$role = Utils::getRoleById($model->id);
 ?>
 
 <div class="user-form">

@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use yii\rbac\Role;
+use app\lib\Utils;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
@@ -40,9 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Role',
                 'value' => function($user) {
-                    $role = Yii::$app->authManager->getRolesByUser($user->id);
-                    $role = array_pop($role);
-                    return ($role instanceof Role) ? $role->name : '';
+                    $role = Utils::getRoleById($user->id);
+                    return ucfirst($role);
                 }
             ],
             'auth_key',

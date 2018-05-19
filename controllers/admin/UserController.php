@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii\rbac\Role;
+use app\lib\Utils;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -82,11 +82,9 @@ class UserController extends Controller
 
         if (!empty($postData)) {
             $model->load($postData);
-            $newRoleName = $postData['role'];
 
-            $role = Yii::$app->authManager->getRolesByUser($model->id);
-            $role = array_pop($role);
-            $oldRoleName = ($role instanceof Role) ? $role->name : '';
+            $newRoleName = $postData['role'];
+            $oldRoleName = Utils::getRoleById($model->id);
 
             $rbac = Yii::$app->authManager;
             $newRole = $rbac->getRole($newRoleName);

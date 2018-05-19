@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\rbac\Role;
+use app\lib\Utils;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearchModel */
@@ -39,9 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'Role',
                 'value' => function($user) {
-                    $role = Yii::$app->authManager->getRolesByUser($user->id);
-                    $role = array_pop($role);
-                    return ($role instanceof Role) ? $role->name : '';
+                    $role = Utils::getRoleById($user->id);
+                    return ucfirst($role);
                 }
             ],
 
